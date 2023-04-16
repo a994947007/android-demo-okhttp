@@ -11,10 +11,24 @@ public class Request {
 
     private final HttpUrl url;
     private final String method;
+    private final RequestBody requestBody;
 
     public Request(Builder builder) {
         this.url = builder.httpUrl;
         this.method = builder.method;
+        this.requestBody = builder.requestBody;
+    }
+
+    public HttpUrl url() {
+        return url;
+    }
+
+    public String method() {
+        return method;
+    }
+
+    public RequestBody requestBody() {
+        return requestBody;
     }
 
     public static class Builder {

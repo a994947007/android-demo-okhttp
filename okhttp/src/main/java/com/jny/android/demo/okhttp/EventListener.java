@@ -10,7 +10,7 @@ public interface EventListener {
 
     void callEnd(Call call);
 
-    public void callFailed(Call call, IOException e);
+    void callFailed(Call call, IOException e);
 
     static EventListener.Factory factory(final EventListener eventListener) {
         return call -> eventListener;

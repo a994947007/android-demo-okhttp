@@ -1,7 +1,5 @@
 package com.jny.android.demo.okhttp;
 
-import androidx.annotation.Nullable;
-
 public class HttpUrl {
 
     private static final String SCHEME_HTTP = "http";
@@ -12,6 +10,19 @@ public class HttpUrl {
     private final int port;
     private final String host;
     private final String url;
+
+    public String host() {
+        return host;
+    }
+
+    public int port() {
+        return port;
+    }
+
+    @Override
+    public String toString() {
+        return url;
+    }
 
     public HttpUrl(String url, String scheme, int port, String host) {
         this.url = url;
@@ -50,5 +61,13 @@ public class HttpUrl {
         }
         pos += index;
         return new HttpUrl(url, scheme, port, host);
+    }
+
+
+    public static class Builder {
+        private String scheme;
+        private int port;
+        private String host;
+        private String url;
     }
 }

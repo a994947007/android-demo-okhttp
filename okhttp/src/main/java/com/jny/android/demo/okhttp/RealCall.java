@@ -1,5 +1,8 @@
 package com.jny.android.demo.okhttp;
 
+import com.jny.android.demo.interceptor.CacheInterceptor;
+import com.jny.android.demo.interceptor.ConnectionInterceptor;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ public class RealCall implements Call{
 
     @Override
     public void enqueue(Callback callback) {
-
+        
     }
 
     @Override
@@ -32,7 +35,15 @@ public class RealCall implements Call{
         if (executed) throw new IllegalStateException("Already Executed");
         executed = true;
         eventListener.callStart(this);
-        return null;
+        try {
+            Response response = getResponseWithInterceptorChain();
+            if (response == null) throw new IOException("Canceled");
+            eventListener.callEnd(this);
+            return response;
+        } catch (IOException e) {
+            eventListener.callFailed(this, e);
+            throw e;
+        }
     }
 
     /**
@@ -40,7 +51,9 @@ public class RealCall implements Call{
      */
     Response getResponseWithInterceptorChain() throws IOException {
         List<Interceptor> interceptors = new ArrayList<>(client.interceptors);
-        Interceptor.Chain chain = null;
+        interceptors.add(new CacheInterceptor());
+        interceptors.add(new ConnectionInterceptor());
+        Interceptor.Chain chain = new RealInterceptorChain(interceptors, 0, originalRequest);
         return chain.proceed(originalRequest);
     }
 }
