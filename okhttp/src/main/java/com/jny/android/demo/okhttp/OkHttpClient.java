@@ -11,7 +11,7 @@ public class OkHttpClient implements Call.Factory{
     final EventListener.Factory eventListenerFactory;
     final List<Interceptor> interceptors;
 
-    public OkHttpClient(Builder builder) {
+    private OkHttpClient(Builder builder) {
         eventListenerFactory = builder.eventListenerFactory;
         interceptors = builder.interceptors;
     }
@@ -29,6 +29,10 @@ public class OkHttpClient implements Call.Factory{
         EventListener.Factory eventListenerFactory;
         List<Interceptor> interceptors = new ArrayList<>();
 
+        public Builder() {
+            eventListenerFactory = EventListener.factory(EventListener.NONE);
+        }
+
         public Builder eventListener(EventListener eventListener) {
             if (eventListener == null) throw new NullPointerException("eventListener == null");
             eventListenerFactory = EventListener.factory(eventListener);
@@ -45,6 +49,10 @@ public class OkHttpClient implements Call.Factory{
             if (interceptor == null) throw new NullPointerException("interceptor == null");
             interceptors.add(interceptor);
             return this;
+        }
+
+        public OkHttpClient build() {
+            return new OkHttpClient(this);
         }
     }
 

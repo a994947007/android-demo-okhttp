@@ -13,7 +13,7 @@ public class Request {
     private final String method;
     private final RequestBody requestBody;
 
-    public Request(Builder builder) {
+    private Request(Builder builder) {
         this.url = builder.httpUrl;
         this.method = builder.method;
         this.requestBody = builder.requestBody;

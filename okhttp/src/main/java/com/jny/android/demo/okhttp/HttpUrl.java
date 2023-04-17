@@ -35,10 +35,10 @@ public class HttpUrl {
         String scheme = "";
         int port = DEFAULT_PORT;
         String host;
-        if (url.regionMatches(true, pos, "https:", 0 ,6)) {
+        if (url.regionMatches(true, pos, "https:", 0 ,5)) {
             scheme = SCHEME_HTTPS;
             pos += "https:".length();
-        } else if (url.regionMatches(true, pos, "http", 0, 5)) {
+        } else if (url.regionMatches(true, pos, "http", 0, 4)) {
             scheme = SCHEME_HTTP;
             pos += "http:".length();
         } else {
@@ -53,11 +53,23 @@ public class HttpUrl {
         index = url.indexOf("/", pos);
         int portSegIndex = -1;
         portSegIndex = url.indexOf(":", pos);
-        if (portSegIndex < index) {
-            port = Integer.parseInt(url.substring(portSegIndex, index));
-            host = url.substring(portSegIndex, index);
+        if (portSegIndex == -1) {
+            port = DEFAULT_PORT;
         } else {
-            host = url.substring(pos, index);
+            if (index == -1) {
+                port = Integer.parseInt(url.substring(portSegIndex));
+            } else {
+                port = Integer.parseInt(url.substring(portSegIndex, index));
+            }
+        }
+        if (portSegIndex == -1) {
+            if (index == -1) {
+                host = url.substring(pos);
+            } else {
+                host = url.substring(pos, index);
+            }
+        } else {
+            host = url.substring(pos, portSegIndex);
         }
         pos += index;
         return new HttpUrl(url, scheme, port, host);

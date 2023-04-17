@@ -26,7 +26,7 @@ public class HttpUtils {
         try {
             URL url = new URL(request.url().toString());
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod(REQUEST_METHOD_POST);
+            connection.setRequestMethod(request.method());
             connection.setConnectTimeout(timeout);
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -80,16 +80,6 @@ public class HttpUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (connection != null) {
-                connection.disconnect();
             }
         }
         return null;
